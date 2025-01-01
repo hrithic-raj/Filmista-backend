@@ -1,12 +1,11 @@
 import express, {Express, } from 'express';
-import dotenv from 'dotenv';
 import connectDB from './config/db';
 import cors from 'cors';
 import helmet from 'helmet';
 import userRouter from './routes/userRoutes';
 import authRouter from './routes/authRoutes';
+import { config } from './config/confiq';
 const app: Express = express();
-dotenv.config();
 
 // Database
 connectDB()
@@ -14,7 +13,7 @@ connectDB()
 // Middleware
 app.use(cors());
 
-if (process.env.NODE_ENV === 'production') {
+if (config.NODE_ENV === 'production') {
   app.use(helmet());
 } else {
   app.use(helmet({ contentSecurityPolicy: false }));

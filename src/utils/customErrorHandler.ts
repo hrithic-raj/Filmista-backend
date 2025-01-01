@@ -11,6 +11,6 @@ class CustomError extends Error {
   
       Error.captureStackTrace(this, this.constructor);
     }
-  }
+}
   
-  export default CustomError
+export default CustomError

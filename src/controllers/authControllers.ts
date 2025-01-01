@@ -4,10 +4,11 @@ import User from "../models/userModel";
 import Celebrity from "../models/celebrityModel";
 import CustomError from "../utils/customErrorHandler";
 import { generateOTP, sendEmail } from "../utils/otp";
+import { createUser } from "../services/authService";
+
 
 export const otpGenerator = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {email} = req.body;
-    console.log(email)
 
     let user = await User.findOne({email});
     if(!user){
@@ -26,3 +27,30 @@ export const otpGenerator = catchAsync(async (req: Request, res: Response, next:
         });
     }
 })
+
+
+export const signup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    // const {name, email, password, otp} = req.body;
+    const {user, accessToken, refreshToken} = await createUser(req.body);
+    res.status(201).json({
+        status: "success",
+        message: "User registered successfully",
+        user,
+        accessToken,
+        refreshToken,
+    });
+})
+
+export const login = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const {email, password} = req.body;
+    const {user, accessToken, refreshToken} = await createUser(req.body);
+    res.status(201).json({
+        status: "success",
+        message: "User registered successfully",
+        user,
+        accessToken,
+        refreshToken,
+    });
+})
+
+
