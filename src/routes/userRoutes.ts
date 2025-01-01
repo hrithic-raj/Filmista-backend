@@ -1,10 +1,9 @@
-import express from 'express';
-import { exampleHandler } from "../controllers/userControllers";
+import express from 'express'
 
-const router = express.Router()
+const userRouter = express.Router();
 
-router.get("/", (req, res)=>{
-  res.send('Hello from the router!');
-});
+// userRouter.get('/', auth, getUserFromToken);
+// userRouter.post('/auth/signup',userValidation, signup);
+// userRouter.post('/auth/login', login);
 
-export default router;
+export default userRouter
