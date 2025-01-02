@@ -4,7 +4,7 @@ import User from "../models/userModel";
 import Celebrity from "../models/celebrityModel";
 import CustomError from "../utils/customErrorHandler";
 import { generateOTP, sendEmail } from "../utils/otp";
-import { createUser } from "../services/authService";
+import { authenticateUser, createUser, refreshTokenService } from "../services/authService";
 
 
 export const otpGenerator = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -43,14 +43,24 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
 
 export const login = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {email, password} = req.body;
-    const {user, accessToken, refreshToken} = await createUser(req.body);
-    res.status(201).json({
+    const user = await authenticateUser(email, password);
+    res.status(200).json({
         status: "success",
-        message: "User registered successfully",
-        user,
-        accessToken,
-        refreshToken,
+        message: "Login successful",
+        user
     });
 })
 
-
+export const refreshToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const {refreshToken} = req.body;
+    if(!refreshToken){
+        const error = new CustomError('Refresh token required', 401)
+        return next(error)
+    }
+    const newAccessToken = await refreshTokenService(refreshToken)
+    res.status(200).json({
+        status: "success",
+        message: "New AccessToken created",
+        newAccessToken
+    });
+})

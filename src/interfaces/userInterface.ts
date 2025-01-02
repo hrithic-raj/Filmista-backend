@@ -7,7 +7,8 @@ interface IUser {
   password: string,
   googleId?: string,
   otp?: string,
-  refreshToken?: string;
+  refreshToken?: string,
+  role: string,
 }
 
 export default IUser

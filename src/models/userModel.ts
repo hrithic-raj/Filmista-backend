@@ -9,6 +9,7 @@ const userSchema: Schema<IUser> = new Schema(
     googleId: { type: String },
     otp: { type: String },
     refreshToken: { type: String },
+    role: {type: String, default: 'user'}
   },
   { timestamps: true }
 );

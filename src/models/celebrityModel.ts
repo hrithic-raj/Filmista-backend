@@ -1,13 +1,6 @@
 import mongoose, {Document, Schema} from "mongoose";
+import Icelebrity from "../interfaces/celebrityInterface";
 
-export interface Icelebrity extends Document {
-    name: string;
-    email: string;
-    password?: string;
-    googleId?: string;
-    isVerified: boolean;
-    otp?: string;
-}
 
 const celebritySchema: Schema<Icelebrity> = new Schema(
     {
@@ -15,12 +8,14 @@ const celebritySchema: Schema<Icelebrity> = new Schema(
         email: {type: String, required: true, unique: true},
         password: {type: String},
         googleId: {type: String},
-        isVerified: {type: Boolean, default: false},
         otp: {type: String},
+        refreshToken: { type: String },
+        role: {type: String, default: 'celebrity'},
+        isVerified: {type: Boolean, default: false},
     },
     { timestamps: true}
 );
 
-const Celebrity = mongoose.model<Icelebrity>('celebrity', celebritySchema);
+const Celebrity = mongoose.model<Icelebrity>('Celebrity', celebritySchema);
 
 export default Celebrity;
