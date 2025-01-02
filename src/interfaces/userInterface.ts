@@ -9,6 +9,7 @@ interface IUser {
   otp?: string,
   refreshToken?: string,
   role: string,
+  profilePicture?: string,
 }
 
 export default IUser

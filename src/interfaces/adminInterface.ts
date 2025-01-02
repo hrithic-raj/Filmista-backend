@@ -8,7 +8,8 @@ interface IAdmin {
   googleId?: string,
   refreshToken?: string,
   role: string,
-  isSuperAdmin?: boolean;
+  isSuperAdmin?: boolean,
+  profilePicture?: string,
 }
 
 export default IAdmin

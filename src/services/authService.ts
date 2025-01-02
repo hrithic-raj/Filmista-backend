@@ -26,8 +26,8 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new User({ name, email, password: hashedPassword, otp, role:'user'});
     await user.save();
-    const accessToken = await generateAccessToken({ userId: user._id, role: 'user' });
-    const refreshToken = await generateRefreshToken({ userId: user._id, role: 'user' });
+    const accessToken = generateAccessToken({ userId: user._id, role: 'user' });
+    const refreshToken = generateRefreshToken({ userId: user._id, role: 'user' });
     user.refreshToken = refreshToken;
     await user.save();
     return {
@@ -47,8 +47,8 @@ const authenticateUser = async (email: string, password: string): Promise<IUserR
     const isMatch = bcrypt.compare(password, user.password || '');
     if(!isMatch) throw new CustomError('Invalid email or password', 400);
 
-    const accessToken = await generateAccessToken({ userId: user._id, role: user.role });
-    const refreshToken = await generateRefreshToken({ userId: user._id, role: user.role });
+    const accessToken = generateAccessToken({ userId: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ userId: user._id, role: user.role });
     user.refreshToken = refreshToken;
     await user.save();
     return {
@@ -72,8 +72,31 @@ const refreshTokenService = async(refreshToken: string)=>{
     return newAccessToken;
 }
 
+const googleAuthService = async(email: string, name: string, picture: string, googleId: string)=>{
+    let user = await User.findOne({ email }) || await Celebrity.findOne({email})
+    if(!user){
+        user = new User({ name, email, role:'user', profilePicture: picture, googleId})
+        await user.save();
+        const accessToken = generateAccessToken({ userId: user._id, role: 'user' });
+        const refreshToken = generateRefreshToken({ userId: user._id, role: 'user' });
+        user.refreshToken = refreshToken;
+        await user.save();
+    }
+
+    const accessToken = generateAccessToken({ userId: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ userId: user._id, role: user.role });
+    user.refreshToken = refreshToken;
+    await user.save();
+    return {
+        user,
+        accessToken,
+        refreshToken,
+        role: user.role
+    }
+}
 export {
     createUser,
     authenticateUser,
-    refreshTokenService
+    refreshTokenService,
+    googleAuthService
 }

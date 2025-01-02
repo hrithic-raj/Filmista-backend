@@ -10,6 +10,7 @@ interface Icelebrity {
   refreshToken?: string,
   isVerified: boolean;
   role: string,
+  profilePicture?: string,
 }
 
 export default Icelebrity

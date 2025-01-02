@@ -6,6 +6,7 @@ const adminSchema: Schema<IAdmin> = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    profilePicture: { type: String},
     refreshToken: { type: String },
     role:{ type: String, default: 'admin'},
     isSuperAdmin: { type: Boolean, default: false },

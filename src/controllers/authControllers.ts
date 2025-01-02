@@ -4,7 +4,8 @@ import User from "../models/userModel";
 import Celebrity from "../models/celebrityModel";
 import CustomError from "../utils/customErrorHandler";
 import { generateOTP, sendEmail } from "../utils/otp";
-import { authenticateUser, createUser, refreshTokenService } from "../services/authService";
+import { authenticateUser, createUser, googleAuthService, refreshTokenService } from "../services/authService";
+import { cookieSaver, generateAccessToken, generateRefreshToken } from "../utils/jwtTokenGenerator";
 
 
 export const otpGenerator = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -30,37 +31,65 @@ export const otpGenerator = catchAsync(async (req: Request, res: Response, next:
 
 
 export const signup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    // const {name, email, password, otp} = req.body;
-    const {user, accessToken, refreshToken} = await createUser(req.body);
+    const {user, accessToken, refreshToken, role} = await createUser(req.body);
+    cookieSaver(res,refreshToken);
     res.status(201).json({
         status: "success",
         message: "User registered successfully",
         user,
         accessToken,
         refreshToken,
+        role,
     });
 })
 
 export const login = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {email, password} = req.body;
-    const user = await authenticateUser(email, password);
+    const {user, accessToken, refreshToken, role} = await authenticateUser(email, password);
+    cookieSaver(res,refreshToken);
     res.status(200).json({
         status: "success",
         message: "Login successful",
-        user
+        user,
+        accessToken,
+        refreshToken,
+        role
     });
 })
 
 export const refreshToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {refreshToken} = req.body;
+    const {refreshToken} = req.cookies.refreshToken;
     if(!refreshToken){
         const error = new CustomError('Refresh token required', 401)
         return next(error)
     }
     const newAccessToken = await refreshTokenService(refreshToken)
+    cookieSaver(res,refreshToken);
     res.status(200).json({
         status: "success",
         message: "New AccessToken created",
         newAccessToken
     });
+})
+
+export const googleAuth = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const {email, name, picture, sub: googleId} = req.user as {
+        email: string, 
+        name: string, 
+        picture: string, 
+        sub: string;
+    };
+
+    const {user, accessToken, refreshToken} = await googleAuthService(email, name, picture, googleId);
+    res.status(200).json({
+        status: "success",
+        message: "Login successful via Google",
+        user,
+        accessToken,
+        refreshToken,
+      });
+})
+
+export const googleAuthCallback = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
 })
