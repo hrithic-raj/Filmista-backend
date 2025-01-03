@@ -5,7 +5,7 @@ import Celebrity from "../models/celebrityModel";
 import CustomError from "../utils/customErrorHandler";
 import { generateOTP, sendEmail } from "../utils/otp";
 import { authenticateUser, createUser, googleAuthService, refreshTokenService } from "../services/authService";
-import { cookieSaver, generateAccessToken, generateRefreshToken } from "../utils/jwtTokenGenerator";
+import { cookieSaver } from "../utils/jwtTokenGenerator";
 
 
 export const otpGenerator = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -43,13 +43,13 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
     });
 })
 
-export const login = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const signin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {email, password} = req.body;
     const {user, accessToken, refreshToken, role} = await authenticateUser(email, password);
     cookieSaver(res,refreshToken);
     res.status(200).json({
         status: "success",
-        message: "Login successful",
+        message: "Signin successful",
         user,
         accessToken,
         refreshToken,
@@ -90,6 +90,6 @@ export const googleAuth = catchAsync(async (req: Request, res: Response, next: N
       });
 })
 
-export const googleAuthCallback = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+// export const googleAuthCallback = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-})
+// })
