@@ -8,6 +8,7 @@ import Celebrity from "../models/celebrityModel";
 import Admin from "../models/adminModel";
 import jwt from 'jsonwebtoken';
 import { config } from "../config/confiq";
+import passport from "passport";
 
 interface IUserResponse {
     user?: IUser,
@@ -42,9 +43,8 @@ const authenticateUser = async (email: string, password: string): Promise<IUserR
     let user = await Admin.findOne({email});
     if(!user) user = await Celebrity.findOne({email});
     if(!user) user = await User.findOne({email});
-    if(!user) throw new CustomError('User not found', 400);
-    
-    const isMatch = bcrypt.compare(password, user.password || '');
+    if(!user) throw new CustomError('Invalid email or password', 400);
+    const isMatch = await bcrypt.compare(password, user.password || '');
     if(!isMatch) throw new CustomError('Invalid email or password', 400);
 
     const accessToken = generateAccessToken({ userId: user._id, role: user.role });

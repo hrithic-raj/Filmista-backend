@@ -10,7 +10,6 @@ import { cookieSaver } from "../utils/jwtTokenGenerator";
 
 export const otpGenerator = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {email} = req.body;
-
     let user = await User.findOne({email});
     if(!user){
         user = await Celebrity.findOne({email});
@@ -28,7 +27,6 @@ export const otpGenerator = catchAsync(async (req: Request, res: Response, next:
         });
     }
 })
-
 
 export const signup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {user, accessToken, refreshToken, role} = await createUser(req.body);
@@ -79,7 +77,7 @@ export const googleAuth = catchAsync(async (req: Request, res: Response, next: N
         picture: string, 
         sub: string;
     };
-
+    
     const {user, accessToken, refreshToken} = await googleAuthService(email, name, picture, googleId);
     res.status(200).json({
         status: "success",
@@ -87,7 +85,8 @@ export const googleAuth = catchAsync(async (req: Request, res: Response, next: N
         user,
         accessToken,
         refreshToken,
-      });
+    });
+    res.redirect('/home');
 })
 
 // export const googleAuthCallback = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

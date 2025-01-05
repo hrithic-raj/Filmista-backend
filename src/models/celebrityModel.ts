@@ -7,7 +7,7 @@ const celebritySchema: Schema<Icelebrity> = new Schema(
         name: {type: String, required: true},
         email: {type: String, required: true, unique: true},
         password: {type: String},
-        googleId: {type: String, unique: true},
+        googleId: {type: String},
         profilePicture: { type: String},
         otp: {type: String},
         refreshToken: { type: String },

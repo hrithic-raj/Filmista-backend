@@ -11,12 +11,14 @@ passport.use(
             callbackURL: config.GOOGLE_CALLBACK_URL,
         },
         async (accessToken, refreshToken, profile, done)=>{
+            console.log("Google Profile:", profile);
             try{
                 const email = profile.emails?.[0]?.value || "";
                 const name = profile.displayName || "";
                 const picture = profile.photos?.[0]?.value || "";
                 const sub = profile.id;
                 const user = [email, name, picture, sub];
+                console.log("User Object:", user);
                 return done(null, user);
             }catch(error){
                 console.error("Error in Google Strategy:", error);
