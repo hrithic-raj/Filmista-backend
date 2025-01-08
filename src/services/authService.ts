@@ -9,6 +9,7 @@ import Admin from "../models/adminModel";
 import jwt from 'jsonwebtoken';
 import { config } from "../config/confiq";
 import passport from "passport";
+import IAdmin from "../interfaces/adminInterface";
 
 interface IUserResponse {
     user?: IUser,
@@ -38,6 +39,7 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
         role: user.role
     }
 }
+
 
 const authenticateUser = async (email: string, password: string): Promise<IUserResponse> => {
     let user = await Admin.findOne({email});
@@ -94,9 +96,33 @@ const googleAuthService = async(email: string, name: string, picture: string, go
         role: user.role
     }
 }
+
+const createAdmin = async (userData: IAdmin): Promise<IUserResponse> => {
+    const {name, email, password} = userData;
+    let user = await User.findOne({email});
+    let admin = await Celebrity.findOne({email});
+    let celebrity = await Admin.findOne({email});
+    if(user || admin || celebrity) throw new CustomError('User Already Exist, Please Signin', 400);
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user = new Admin({ name, email, password: hashedPassword, role:'admin'});
+    await user.save();
+    const accessToken = generateAccessToken({ userId: user._id, role: 'admin' });
+    const refreshToken = generateRefreshToken({ userId: user._id, role: 'admin' });
+    user.refreshToken = refreshToken;
+    await user.save();
+    return {
+        user,
+        accessToken,
+        refreshToken,
+        role: user.role
+    }
+}
+
 export {
     createUser,
     authenticateUser,
     refreshTokenService,
-    googleAuthService
+    googleAuthService,
+    createAdmin,
 }

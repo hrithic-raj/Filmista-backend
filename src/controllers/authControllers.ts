@@ -4,7 +4,7 @@ import User from "../models/userModel";
 import Celebrity from "../models/celebrityModel";
 import CustomError from "../utils/customErrorHandler";
 import { generateOTP, sendEmail } from "../utils/otp";
-import { authenticateUser, createUser, googleAuthService, refreshTokenService } from "../services/authService";
+import { authenticateUser, createAdmin, createUser, googleAuthService, refreshTokenService } from "../services/authService";
 import { cookieSaver } from "../utils/jwtTokenGenerator";
 
 
@@ -30,6 +30,7 @@ export const otpGenerator = catchAsync(async (req: Request, res: Response, next:
 
 export const signup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {user, accessToken, refreshToken, role} = await createUser(req.body);
+    // const {user, accessToken, refreshToken, role} = await createAdmin(req.body);
     cookieSaver(res,refreshToken);
     res.status(201).json({
         status: "success",
