@@ -5,7 +5,7 @@ import Celebrity from "../models/celebrityModel";
 import CustomError from "../utils/customErrorHandler";
 import { generateOTP, sendEmail } from "../utils/otp";
 import { authenticateUser, createAdmin, createUser, googleAuthService, refreshTokenService } from "../services/authService";
-import { cookieSaver } from "../utils/jwtTokenGenerator";
+import { clearCookie, cookieSaver } from "../utils/jwtTokenGenerator";
 
 
 export const otpGenerator = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -88,6 +88,11 @@ export const googleAuth = catchAsync(async (req: Request, res: Response, next: N
         refreshToken,
     });
     res.redirect('/home');
+})
+
+export const signout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    clearCookie(res);
+    res.status(200).json({ message: 'Logged out successfully' });
 })
 
 // export const googleAuthCallback = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
