@@ -10,6 +10,7 @@ interface IUser {
   refreshToken?: string,
   role: string,
   profilePicture?: string,
+  isBlocked?:boolean,
 }
 
 export default IUser

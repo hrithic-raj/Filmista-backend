@@ -4,7 +4,7 @@ import User from "../models/userModel";
 import Celebrity from "../models/celebrityModel";
 import CustomError from "../utils/customErrorHandler";
 import { generateOTP, sendEmail } from "../utils/otp";
-import { authenticateUser, createAdmin, createUser, googleAuthService, refreshTokenService } from "../services/authService";
+import { authenticateUser, createAdmin, createUser, googleAuthService, refreshTokenService } from "../services/authServices";
 import { clearCookie, cookieSaver } from "../utils/jwtTokenGenerator";
 
 
@@ -57,7 +57,9 @@ export const signin = catchAsync(async (req: Request, res: Response, next: NextF
 })
 
 export const refreshToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {refreshToken} = req.cookies.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
+    console.log(req.cookies.refreshToken);
+    
     if(!refreshToken){
         const error = new CustomError('Refresh token required', 401)
         return next(error)

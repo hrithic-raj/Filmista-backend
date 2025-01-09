@@ -10,7 +10,8 @@ const userSchema: Schema<IUser> = new Schema(
     profilePicture: { type: String},
     otp: { type: String },
     refreshToken: { type: String },
-    role: {type: String, default: 'user'}
+    role: {type: String, default: 'user'},
+    isBlocked: { type: Boolean, default: false},
   },
   { timestamps: true }
 );

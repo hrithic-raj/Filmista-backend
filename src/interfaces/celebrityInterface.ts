@@ -11,6 +11,7 @@ interface Icelebrity {
   isVerified: boolean;
   role: string,
   profilePicture?: string,
+  isBlocked?:boolean,
 }
 
 export default Icelebrity

@@ -28,8 +28,8 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new User({ name, email, password: hashedPassword, otp, role:'user'});
     await user.save();
-    const accessToken = generateAccessToken({ userId: user._id, role: 'user' });
-    const refreshToken = generateRefreshToken({ userId: user._id, role: 'user' });
+    const accessToken = generateAccessToken({ id: user._id, role: 'user' });
+    const refreshToken = generateRefreshToken({ id: user._id, role: 'user' });
     user.refreshToken = refreshToken;
     await user.save();
     return {
@@ -49,8 +49,8 @@ const authenticateUser = async (email: string, password: string): Promise<IUserR
     const isMatch = await bcrypt.compare(password, user.password || '');
     if(!isMatch) throw new CustomError('Invalid email or password', 400);
 
-    const accessToken = generateAccessToken({ userId: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ userId: user._id, role: user.role });
+    const accessToken = generateAccessToken({ id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
     user.refreshToken = refreshToken;
     await user.save();
     return {
@@ -68,9 +68,9 @@ const refreshTokenService = async(refreshToken: string)=>{
     if(decoded.role==='admin') model = Admin;
     if(decoded.role==='celebrity') model = Celebrity;
     if(decoded.role==='user') model = User;
-    const user = await model?.findById(decoded.userId);
+    const user = await model?.findById(decoded.id);
     if(!user || user.refreshToken != refreshToken) throw new CustomError('Invalid refresh token', 403);
-    const newAccessToken = generateAccessToken({userId: user._id});
+    const newAccessToken = generateAccessToken({ id: user._id});
     return newAccessToken;
 }
 
@@ -79,14 +79,14 @@ const googleAuthService = async(email: string, name: string, picture: string, go
     if(!user){
         user = new User({ name, email, role:'user', profilePicture: picture, googleId})
         await user.save();
-        const accessToken = generateAccessToken({ userId: user._id, role: 'user' });
-        const refreshToken = generateRefreshToken({ userId: user._id, role: 'user' });
+        const accessToken = generateAccessToken({ id: user._id, role: 'user' });
+        const refreshToken = generateRefreshToken({ id: user._id, role: 'user' });
         user.refreshToken = refreshToken;
         await user.save();
     }
 
-    const accessToken = generateAccessToken({ userId: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ userId: user._id, role: user.role });
+    const accessToken = generateAccessToken({ id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
     user.refreshToken = refreshToken;
     await user.save();
     return {
@@ -107,8 +107,8 @@ const createAdmin = async (userData: IAdmin): Promise<IUserResponse> => {
     const hashedPassword = await bcrypt.hash(password, 10);
     user = new Admin({ name, email, password: hashedPassword, role:'admin'});
     await user.save();
-    const accessToken = generateAccessToken({ userId: user._id, role: 'admin' });
-    const refreshToken = generateRefreshToken({ userId: user._id, role: 'admin' });
+    const accessToken = generateAccessToken({ id: user._id, role: 'admin' });
+    const refreshToken = generateRefreshToken({ id: user._id, role: 'admin' });
     user.refreshToken = refreshToken;
     await user.save();
     return {

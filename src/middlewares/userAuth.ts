@@ -8,13 +8,14 @@ interface DecodedToken extends JwtPayload{
     role: string;
 }
 
-export const auth = async (req: Request, res: Response, next: NextFunction )=>{
+export const userAuth = async (req: Request, res: Response, next: NextFunction )=>{
     const token = req.headers['authorization']?.split(' ')[1];
+    console.log(token);
     if(!token) next(new CustomError('Access denied, no token provided', 401));
     const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET) as DecodedToken;
-    if(typeof decoded === 'object' && decoded.userId && decoded.role==='user'){
+    if(typeof decoded === 'object' && decoded.id && decoded.role==='user'){
         req.user = {
-            userId: decoded.userId,
+            userId: decoded.id,
             role: decoded.role,
         };
         return next();

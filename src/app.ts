@@ -8,6 +8,7 @@ import { config } from './config/confiq';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import session from "express-session";
+import adminRouter from './routes/adminRoutes';
 const app: Express = express();
 
 // Database
@@ -50,6 +51,7 @@ app.use(
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/admin", adminRouter);
 // app.use("/api/users", userRouter);
 
 export default app;

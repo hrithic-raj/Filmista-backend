@@ -13,6 +13,7 @@ const celebritySchema: Schema<Icelebrity> = new Schema(
         refreshToken: { type: String },
         role: {type: String, default: 'celebrity'},
         isVerified: {type: Boolean, default: false},
+        isBlocked: { type: Boolean, default: false},
     },
     { timestamps: true}
 );
