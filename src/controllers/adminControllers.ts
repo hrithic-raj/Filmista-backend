@@ -10,3 +10,28 @@ export const getAllUsers = catchAsync(async(req: Request, res: Response, next: N
         users,
     });
 })
+
+export const getUserById = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+    const {userId} = req.params;
+    const user = await User.findById(userId);
+    res.status(201).json({
+        status: "success",
+        message: "user fetched successfully",
+        user,
+    });
+})
+
+export const BlockUser = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+    const {userId} = req.params;
+    console.log('blockuser id',req.params)
+    const user = await User.findById(userId);
+    user.isBlocked = !user.isBlocked;
+    user.save();
+    res.status(201).json({
+        status: "success",
+        message: "All users fetched successfully",
+        user,
+    });
+})
+
+

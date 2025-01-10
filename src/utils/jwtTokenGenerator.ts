@@ -7,7 +7,7 @@ export const generateAccessToken = (payload: object) => {
 };
 
 export const generateRefreshToken = (payload: object) => {
-    return jwt.sign(payload,  config.REFRESH_TOKEN_SECRET, { expiresIn: '7d' }); 
+    return jwt.sign(payload,  config.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 };
 
 export const cookieSaver = (res: Response, refreshToken: string)=>{

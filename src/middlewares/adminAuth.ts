@@ -12,9 +12,7 @@ interface DecodedToken extends JwtPayload{
 export const adminAuth = async (req: Request, res: Response, next: NextFunction ): Promise<void>=>{
     // const token = req.headers['authorization']?.split(' ')[1];
     const token = req.headers.authorization?.split(' ')[1];
-    console.log(token);
     if(!token) next(new CustomError('Access denied, no token provided', 401));
-    
     try{
         const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET) as DecodedToken;
         const admin = await Admin.findById(decoded.id);

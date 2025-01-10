@@ -58,7 +58,6 @@ export const signin = catchAsync(async (req: Request, res: Response, next: NextF
 
 export const refreshToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken;
-    console.log(req.cookies.refreshToken);
     
     if(!refreshToken){
         const error = new CustomError('Refresh token required', 401)
