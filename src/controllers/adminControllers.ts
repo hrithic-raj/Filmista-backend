@@ -23,10 +23,9 @@ export const getUserById = catchAsync(async(req: Request, res: Response, next: N
 
 export const BlockUser = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     const {userId} = req.params;
-    console.log('blockuser id',req.params)
     const user = await User.findById(userId);
     user.isBlocked = !user.isBlocked;
-    user.save();
+    await user.save();
     res.status(201).json({
         status: "success",
         message: "All users fetched successfully",

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-
 import * as genreServices from '../services/genreServices';
 import CustomError from '../utils/customErrorHandler';
 import catchAsync from '../utils/catchAsync';
@@ -17,12 +16,18 @@ export const getAllGenres = catchAsync(async (req: Request, res: Response, next:
 });
 
 export const addGenre = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {genre} = req.body;
-    const posterUrl = req.file?.path;
 
-    if(!posterUrl) throw new CustomError('Poster image is required', 400);
+    // const newGenreData = {genre: req.body.genre, isArchive: req.body.isArchive, posterUrl: req.file?.path}
+    const data = JSON.parse(req.body.data)
+    const newGenreData = {
+        genre: data.genre,
+        isArchive: data.isArchive,
+        posterUrl: req.file?.path,
+    };
 
-    const newGenre = await genreServices.addGenre(genre, posterUrl);
+    if(!newGenreData.posterUrl) throw new CustomError('Poster image is required', 400);
+
+    const newGenre = await genreServices.addGenre(newGenreData);
     res.status(201).json({
         status: "success",
         message: "New genre added",
@@ -32,7 +37,13 @@ export const addGenre = catchAsync(async (req: Request, res: Response, next: Nex
 
 export const updateGenre = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {genreId} = req.params;
-    const updatedData = {genre: req.body.genre, posterUrl: req.file?.path}
+    // const updatedData = {genre: req.body.genre, isArchive: req.body.isArchive, posterUrl: req.file?.path}
+    const data = JSON.parse(req.body.data);
+    const updatedData = {
+        genre: data.genre, 
+        isArchive: data.isArchive,
+        posterUrl: req.file?.path
+    }
 
     const updatedGenre = await genreServices.updateGenre(genreId, updatedData);
     if(!updatedGenre) throw new CustomError('Genre not found', 404);
@@ -52,11 +63,10 @@ export const archiveGenre = catchAsync(async (req: Request, res: Response, next:
 
     res.status(200).json({
         status: "success",
-        message: "genre updated",
-        genre: updateGenre,
+        message: "genre archived",
+        genre: archivedGenre,
     });
 });
-
 
 
 export const getMoviesByGenre = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
