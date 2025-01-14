@@ -51,6 +51,7 @@ app.use(
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
 // app.use("/api/users", userRouter);
 

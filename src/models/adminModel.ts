@@ -1,6 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import IAdmin from '../interfaces/adminInterface';
 
+// export type IAdminDocument = IAdmin & Document;
+
 const adminSchema: Schema<IAdmin> = new Schema(
   {
     name: { type: String, required: true },

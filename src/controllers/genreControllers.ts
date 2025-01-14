@@ -28,6 +28,7 @@ export const addGenre = catchAsync(async (req: Request, res: Response, next: Nex
     if(!newGenreData.posterUrl) throw new CustomError('Poster image is required', 400);
 
     const newGenre = await genreServices.addGenre(newGenreData);
+
     res.status(201).json({
         status: "success",
         message: "New genre added",
@@ -51,9 +52,9 @@ export const updateGenre = catchAsync(async (req: Request, res: Response, next: 
     res.status(200).json({
         status: "success",
         message: "genre updated",
-        genre: updateGenre,
+        genre: updatedGenre,
     });
-})
+});
 
 export const archiveGenre = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { genreId } = req.params;
@@ -78,6 +79,6 @@ export const getMoviesByGenre = catchAsync(async (req: Request, res: Response, n
     res.status(200).json({
         status: "success",
         message: "genre updated",
-        genreWithMovies,
+        genre:genreWithMovies,
     });
 });

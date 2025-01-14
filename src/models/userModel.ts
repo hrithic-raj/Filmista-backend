@@ -1,6 +1,8 @@
 import mongoose, { Document, Schema, ObjectId} from 'mongoose';
 import IUser from '../interfaces/userInterface';
 
+// export type IUserDocument = IUser & Document;
+
 const userSchema: Schema<IUser> = new Schema(
   {
     name: { type: String, required: true },

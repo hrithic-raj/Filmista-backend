@@ -2,6 +2,14 @@ import mongoose, {Document, Schema} from "mongoose";
 import Icelebrity from "../interfaces/celebrityInterface";
 
 
+// const celebritySchema: Schema<Icelebrity> = new Schema(
+//     {
+//         name: {type: String, required: true},
+//         email: {type: String, required: true, unique: true},
+//         userId: { type: Schema.Types.ObjectId, ref: 'User'},
+//     },
+//     { timestamps: true}
+// );
 const celebritySchema: Schema<Icelebrity> = new Schema(
     {
         name: {type: String, required: true},
@@ -12,7 +20,7 @@ const celebritySchema: Schema<Icelebrity> = new Schema(
         otp: {type: String},
         refreshToken: { type: String },
         role: {type: String, default: 'celebrity'},
-        isVerified: {type: Boolean, default: false},
+        bio: {type: String, default: ''},
         isBlocked: { type: Boolean, default: false},
     },
     { timestamps: true}

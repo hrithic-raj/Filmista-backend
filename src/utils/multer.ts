@@ -17,7 +17,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'filmista',
-        allowed_formats: ['jpg', 'jpeg', 'png'],
+        allowed_formats: ['jpg', 'jpeg', 'png', 'pdf'],
     }as { folder: string; allowed_formats: string[] },
 }) as StorageEngine;
 

@@ -1,7 +1,8 @@
-import { ObjectId } from "mongoose";
+import { Document, ObjectId } from "mongoose";
+import { Types } from 'mongoose';
 
-interface IAdmin {
-  _id?: ObjectId,
+interface IAdmin extends Document {
+  // _id?: Types.ObjectId,
   name: string,
   email: string,
   password: string,

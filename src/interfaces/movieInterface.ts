@@ -1,10 +1,14 @@
+import mongoose from "mongoose";
+
 interface IMovie {
     title: string;
     description: string;
     releaseDate: string;
     duration: number;
-    genres: string[];
-    language: string[];
+    genres: mongoose.Types.ObjectId[];
+    language: mongoose.Types.ObjectId[];
+    // genres: string[];
+    // language: string[];
     director: string;
     cast: {
         name: string;

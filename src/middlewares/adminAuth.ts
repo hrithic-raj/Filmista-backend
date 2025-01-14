@@ -3,6 +3,7 @@ import { config } from '../config/confiq';
 import CustomError from '../utils/customErrorHandler';
 import { NextFunction, Request, Response } from 'express';
 import Admin from '../models/adminModel';
+import IAdmin from '../interfaces/adminInterface';
 
 interface DecodedToken extends JwtPayload{
     id: string;
@@ -18,7 +19,7 @@ export const adminAuth = async (req: Request, res: Response, next: NextFunction 
         const admin = await Admin.findById(decoded.id);
         if (!admin || decoded.role!=='admin') next(new CustomError('Access Forbidden', 403));
         
-        req.user = admin;
+        req.user = admin as IAdmin;
         next();
     }catch(error){
         res.status(401).json({ message: 'Invalid token' });

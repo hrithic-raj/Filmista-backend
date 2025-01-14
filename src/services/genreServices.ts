@@ -1,5 +1,6 @@
 import IGenre from "../interfaces/genreInterface";
 import Genre from "../models/genreModel";
+import Movie from "../models/movieModel";
 import CustomError from "../utils/customErrorHandler";
 
 export const addGenre = async (newGenreData: {genre?:string; isArchive?: boolean; posterUrl?: string}): Promise<IGenre> => {
@@ -20,7 +21,6 @@ export const updateGenre = async (genreId: string, updatedData:{genre?:string; i
     genre.isArchive = updatedData.isArchive;
     if(updatedData.genre) genre.genre = updatedData.genre;
     
-    console.log(genre)
     return await genre.save();
 };
 
@@ -32,5 +32,11 @@ export const archiveGenre = async (id: string): Promise<IGenre | null> => {
 };
 
 export const getMoviesByGenre = async (id: string): Promise<IGenre | null> => {
-    return await Genre.findById(id).populate('movies');
+    // return await Genre.findById(id).populate('movies');
+    const genre = await Genre.findById(id).populate({
+        path: 'movies',
+        model: Movie,
+        select: 'title description poster horizontalPoster',
+    });
+    return genre;
 };

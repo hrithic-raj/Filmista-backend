@@ -3,7 +3,7 @@ import { config } from '../config/confiq';
 import { Response } from 'express';
 
 export const generateAccessToken = (payload: object) => {
-    return jwt.sign(payload, config.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+    return jwt.sign(payload, config.ACCESS_TOKEN_SECRET, { expiresIn: '1m' });
 };
 
 export const generateRefreshToken = (payload: object) => {

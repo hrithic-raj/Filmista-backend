@@ -6,8 +6,10 @@ const movieSchema: Schema<IMovie> = new mongoose.Schema({
     description: { type: String, required: true },
     releaseDate: { type: String, required: true },
     duration: { type: Number, required: true },
-    genres: { type: [String], required: true },
-    language: { type: [String], required: true },
+    genres: [{ type: Schema.Types.ObjectId, ref: 'Genre'}],
+    language: [{ type: Schema.Types.ObjectId, ref: 'Language'}],
+    // genres: { type: [String], required: true },
+    // language: { type: [String], required: true },
     director: { type: String, required: true },
     cast: [
         {
