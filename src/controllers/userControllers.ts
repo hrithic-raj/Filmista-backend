@@ -12,6 +12,8 @@ export const submitCelebrityRequest = catchAsync(async(req: Request, res: Respon
   if(!req.file) throw new CustomError('Proof document is required', 400);
   
   const proofDocument = req.file.path;
+  console.log(proofDocument)
+  
   const existingRequest = await CelebrityRequest.findOne({
     userId: user._id,
     status: {$in:['pending', 'approved']},

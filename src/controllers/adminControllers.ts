@@ -72,6 +72,7 @@ export const BlockCelebrity = catchAsync(async(req: Request, res: Response, next
 
 export const getAllCelebrityRequest = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     const requests = await CelebrityRequest.find();
+    // console.log(requests)
     res.status(201).json({
         status: "success",
         message: "All users fetched successfully",
