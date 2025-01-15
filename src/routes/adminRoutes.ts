@@ -1,6 +1,6 @@
 import express from 'express'
 import { adminAuth } from '../middlewares/adminAuth';
-import { BlockUser, getAllUsers, getUserById, reviewCelebrityRequest } from '../controllers/adminControllers';
+import { BlockCelebrity, BlockUser, getAllCelebrities, getAllCelebrityRequest, getAllUsers, getCelebrityById, getUserById, reviewCelebrityRequest } from '../controllers/adminControllers';
 import { addGenre, archiveGenre, getAllGenres, getMoviesByGenre, updateGenre } from '../controllers/genreControllers';
 import upload from '../utils/multer';
 import { addLanguage, archiveLanguage, getAllLanguages, getMoviesByLanguage, updateLanguage } from '../controllers/languageControllers';
@@ -28,6 +28,11 @@ adminRouter.patch('/languages/:langId', adminAuth, upload.single('poster'), upda
 adminRouter.patch('/languages/:langId/archive', adminAuth, archiveLanguage);
 
 //celebrity manage routes
+adminRouter.get('/celebrities', adminAuth, getAllCelebrities);
+adminRouter.get('/celebrities/:celebrityId', adminAuth, getCelebrityById);
+adminRouter.patch('/celebrities/:celebrityId/block', adminAuth, BlockCelebrity);
+adminRouter.get('/celebrities/requests', adminAuth, getAllCelebrityRequest);
+adminRouter.patch('/celebrities/review-request', adminAuth, reviewCelebrityRequest);
 
 //movie manage routes
 

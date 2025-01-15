@@ -18,7 +18,7 @@ export const adminAuth = async (req: Request, res: Response, next: NextFunction 
         const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET) as DecodedToken;
         const admin = await Admin.findById(decoded.id);
         if (!admin || decoded.role!=='admin') next(new CustomError('Access Forbidden', 403));
-        
+        // console.log(admin)
         req.user = admin as IAdmin;
         next();
     }catch(error){

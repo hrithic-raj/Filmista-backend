@@ -43,8 +43,18 @@ export const getAllCelebrities = catchAsync(async(req: Request, res: Response, n
     const celebrities = await Celebrity.find();
     res.status(201).json({
         status: "success",
-        message: "All users fetched successfully",
+        message: "All celebrities fetched successfully",
         celebrities,
+    });
+})
+
+export const getCelebrityById = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+    const {celebrityId} = req.params;
+    const celebrity = await Celebrity.findById(celebrityId);
+    res.status(201).json({
+        status: "success",
+        message: "celebrity fetched successfully",
+        celebrity,
     });
 })
 
