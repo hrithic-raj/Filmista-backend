@@ -12,8 +12,7 @@ export const submitCelebrityRequest = catchAsync(async(req: Request, res: Respon
   if(!req.file) throw new CustomError('Proof document is required', 400);
   
   const proofDocument = req.file.path;
-  console.log(proofDocument)
-  
+
   const existingRequest = await CelebrityRequest.findOne({
     userId: user._id,
     status: {$in:['pending', 'approved']},
@@ -27,5 +26,14 @@ export const submitCelebrityRequest = catchAsync(async(req: Request, res: Respon
       status: "success",
       message: "Request submitted successfully",
       request,
+  });
+})
+
+export const getProfile = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+  const user = req.user
+  res.status(201).json({
+    status: "success",
+    message: "User profile fetched",
+    user,
   });
 })

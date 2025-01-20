@@ -40,7 +40,7 @@ export const BlockUser = catchAsync(async(req: Request, res: Response, next: Nex
 //Celebrity controllers
 
 export const getAllCelebrities = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
-    const celebrities = await Celebrity.find();
+    const celebrities = await Celebrity.find().populate('userId');
     res.status(201).json({
         status: "success",
         message: "All celebrities fetched successfully",
@@ -50,7 +50,7 @@ export const getAllCelebrities = catchAsync(async(req: Request, res: Response, n
 
 export const getCelebrityById = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     const {celebrityId} = req.params;
-    const celebrity = await Celebrity.findById(celebrityId);
+    const celebrity = await Celebrity.findById(celebrityId).populate('userId');
     res.status(201).json({
         status: "success",
         message: "celebrity fetched successfully",
@@ -60,7 +60,9 @@ export const getCelebrityById = catchAsync(async(req: Request, res: Response, ne
 
 export const BlockCelebrity = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     const {celebrityId} = req.params;
-    const celebrity = await Celebrity.findById(celebrityId);
+    const celebrityRef = (await Celebrity.findById(celebrityId));
+    const userId = celebrityRef.userId;
+    const celebrity = await User.findById(userId);
     celebrity.isBlocked = !celebrity.isBlocked;
     await celebrity.save();
     res.status(201).json({
@@ -83,29 +85,27 @@ export const getAllCelebrityRequest = catchAsync(async(req: Request, res: Respon
 export const reviewCelebrityRequest = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     const { requestId, status } = req.body;
 
-    console.log(requestId)
     const request = await CelebrityRequest.findById(requestId);
     if (!request) throw new CustomError('Request not found', 404);
-
+    
     if (request.status !== 'pending') throw new CustomError('Request has already been reviewed.', 400);
-
+    
     if (status === 'approved') {
-      const user = await User.findById(request.userId);
-      if (!user) throw new CustomError('User not found', 404);
+        const user = await User.findById(request.userId);
+        if (!user) throw new CustomError('User not found', 404);
+        
+        const celebrity = new Celebrity({
+            userId: request.userId,
+            proofDocument: request.proofDocument,
+        });
 
-      const celebrity = new Celebrity({
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        // profilePicture: user.profilePicture,
-
-      });
-
-      await celebrity.save();
-      await User.findByIdAndDelete(request.userId);
-
-      const post = new Post({ celebrityId: celebrity._id, posts: [] });
-      await post.save();
+        await celebrity.save();
+        //   await User.findByIdAndDelete(request.userId);
+        user.role = 'celebrity'
+        await user.save();
+        
+        const post = new Post({ celebrityId: celebrity._id, posts: [] });
+        await post.save();
     }
 
     request.status = status;
@@ -117,3 +117,5 @@ export const reviewCelebrityRequest = catchAsync(async(req: Request, res: Respon
         request,
     });
 });
+
+

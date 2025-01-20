@@ -6,12 +6,12 @@ import Language from '../models/languageModel';
 
 export const getAllLanguages = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 
-    const language = await Language.find();
+    const languages = await Language.find();
 
     res.status(200).json({
         status: "success",
         message: "Languages fetched",
-        language,
+        languages,
     });
 });
 

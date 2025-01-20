@@ -35,5 +35,7 @@ adminRouter.get('/celebrities/:celebrityId', adminAuth, getCelebrityById);
 adminRouter.patch('/celebrities/:celebrityId/block', adminAuth, BlockCelebrity);
 
 //movie manage routes
+adminRouter.get('/movies', adminAuth, );
+adminRouter.post('/movies', adminAuth, );
 
 export default adminRouter
