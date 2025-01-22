@@ -1,7 +1,7 @@
 import IMovie from "../interfaces/movieInterface";
+import Movie from "../models/movieModel";
 
-export const addMovie = async (newLanguageData: {language?:string; isArchive?: boolean; posterUrl?: string}): Promise<IMovie> => {
-
-
-    return
+export const addMovies = async (newMovieData:IMovie): Promise<IMovie> => {
+    const newMovie = await Movie.create(newMovieData);
+    return newMovie;
 };

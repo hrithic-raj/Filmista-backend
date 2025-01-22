@@ -7,12 +7,9 @@ interface IMovie {
     duration: number;
     genres: mongoose.Types.ObjectId[];
     language: mongoose.Types.ObjectId[];
-    // genres: string[];
-    // language: string[];
-    director: string;
     cast: {
         name: string;
-        characterName: string;
+        role: string;
         celebrityId?: string;
     }[];
     images?: {
@@ -24,8 +21,7 @@ interface IMovie {
         trailer: string;
         others: string[];
     };
-    tags?: string[];
-    rating: number;
+    rating?: number;
     reviews?: {
         userId: string;
         review: string;

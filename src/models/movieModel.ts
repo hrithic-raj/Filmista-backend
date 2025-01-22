@@ -8,13 +8,10 @@ const movieSchema: Schema<IMovie> = new mongoose.Schema({
     duration: { type: Number, required: true },
     genres: [{ type: Schema.Types.ObjectId, ref: 'Genre'}],
     language: [{ type: Schema.Types.ObjectId, ref: 'Language'}],
-    // genres: { type: [String], required: true },
-    // language: { type: [String], required: true },
-    director: { type: String, required: true },
     cast: [
         {
             name: { type: String, required: true },
-            characterName: { type: String, required: true },
+            role: { type: String, required: true },
             celebrityId: { type: String }
         }
     ],
@@ -27,7 +24,6 @@ const movieSchema: Schema<IMovie> = new mongoose.Schema({
         trailer: { type: String, required: true },
         others: { type: [String] }
     },
-    tags: { type: [String] },
     rating: { type: Number },
     reviews: [
         {

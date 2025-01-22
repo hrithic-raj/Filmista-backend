@@ -32,16 +32,16 @@
 //     //   };
 //     // },
 
-//     cloudinary: cloudinary,
-//     params: async (req, file) => {
-//         const isPDF = file.mimetype === 'application/pdf';
-//         return {
-//         folder: 'filmista',
-//         resource_type: 'auto', // Let Cloudinary determine the correct type
-//         format: isPDF ? 'pdf' : undefined,
-//         public_id: file.originalname.split('.')[0], // Use original filename without extension
-//         };
-//     },
+//     // cloudinary: cloudinary,
+//     // params: async (req, file) => {
+//     //     const isPDF = file.mimetype === 'application/pdf';
+//     //     return {
+//     //     folder: 'filmista',
+//     //     resource_type: 'auto', // Let Cloudinary determine the correct type
+//     //     format: isPDF ? 'pdf' : undefined,
+//     //     public_id: file.originalname.split('.')[0], // Use original filename without extension
+//     //     };
+//     // },
 // }) as StorageEngine;
 
 
