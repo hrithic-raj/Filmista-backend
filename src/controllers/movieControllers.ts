@@ -5,6 +5,18 @@ import CustomError from '../utils/customErrorHandler';
 import catchAsync from '../utils/catchAsync';
 import * as movieServices from '../services/movieServices';
 import IMovie from '../interfaces/movieInterface';
+import Movie from '../models/movieModel';
+
+export const getAllMovies = catchAsync( async(req: Request, res: Response, next: NextFunction)=>{
+    const movies = await Movie.find();
+    
+    res.status(201).json({
+        status: "success",
+        message: "New movie added",
+        movies,
+    });
+})
+
 
 export const addMovies = catchAsync( async(req: Request, res: Response, next: NextFunction)=>{
     const data = JSON.parse(req.body.data);
