@@ -8,8 +8,7 @@ import IMovie from '../interfaces/movieInterface';
 import Movie from '../models/movieModel';
 
 export const getAllMovies = catchAsync( async(req: Request, res: Response, next: NextFunction)=>{
-    const movies = await Movie.find();
-    
+    const movies = await Movie.find().populate(['genres', 'languages']);
     res.status(201).json({
         status: "success",
         message: "New movie added",
@@ -35,7 +34,7 @@ export const addMovies = catchAsync( async(req: Request, res: Response, next: Ne
         releaseDate: data.releaseDate,
         duration: data.duration,
         genres: data.genres,
-        language: data.languages,
+        languages: data.languages,
         cast: data.cast,
         images: {
             poster: posterUrl,
@@ -50,7 +49,6 @@ export const addMovies = catchAsync( async(req: Request, res: Response, next: Ne
     }
 
     const newMovie = await movieServices.addMovies(newMovieData);
-    console.log(newMovie);
     res.status(201).json({
         status: "success",
         message: "New movie added",

@@ -4,16 +4,33 @@ import CustomError from '../utils/customErrorHandler';
 import catchAsync from '../utils/catchAsync';
 import Genre from '../models/genreModel';
 
+export const getGenres = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10; 
+
+    const skip = (page - 1) * limit;
+    const genres = await Genre.find().skip(skip).limit(Number(limit));
+  
+    const totalGenres = await Genre.countDocuments();
+    const totalPages = Math.ceil(totalGenres / limit);
+  
+    res.status(200).json({
+        status: "success",
+        message: "genre fetched",
+        currentPage: Number(page),
+        totalPages,
+        genres,
+    });
+});
+
 export const getAllGenres = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-
     const genres = await Genre.find();
-
     res.status(200).json({
         status: "success",
         message: "genre fetched",
         genres,
     });
-});
+})
 
 export const addGenre = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 

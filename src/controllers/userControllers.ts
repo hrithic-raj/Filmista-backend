@@ -4,6 +4,8 @@ import User from "../models/userModel";
 import CustomError from "../utils/customErrorHandler";
 import { CelebrityRequest } from "../models/celebrityRequestModel";
 import IUser from "../interfaces/userInterface";
+import Celebrity from "../models/celebrityModel";
+import Icelebrity from "../interfaces/celebrityInterface";
 
 
 export const submitCelebrityRequest = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
@@ -30,10 +32,59 @@ export const submitCelebrityRequest = catchAsync(async(req: Request, res: Respon
 })
 
 export const getProfile = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
-  const user = req.user
-  res.status(201).json({
+  let user = req.user as IUser
+  // if(user.role==='celebrity'){
+  //   const celebrity = await Celebrity.findOne({userId:user._id}).populate('userId')
+  //   res.status(200).json({
+  //     status: "success",
+  //     message: "User profile fetched",
+  //     user: celebrity,
+  //   });
+  // }
+  res.status(200).json({
     status: "success",
     message: "User profile fetched",
     user,
+  });
+})
+
+export const addUserGenres = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+  const user = req.user as any;
+  const {genreIds} = req.body;
+
+  if (!genreIds || !Array.isArray(genreIds))  throw new CustomError('Genres must be an array.', 400);
+  
+  const updatedUser = await User.findByIdAndUpdate(
+    user.userId ? user.userId._id : user._id,
+    {$set:{genres: genreIds}},
+    {new: true}
+  );
+
+  if (!updatedUser)  throw new CustomError('User not found.', 404);
+
+  res.status(201).json({
+    status: "success",
+    message: "User genres updated",
+    updatedUser,
+  });
+})
+
+export const addUserLanguages = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+  const user = req.user as any;
+  const {langIds} = req.body;
+  if (!langIds || !Array.isArray(langIds)) throw new CustomError('languages must be an array.', 400);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    user.userId?user.userId._id : user._id,
+    {$set:{languages:langIds}},
+    {new: true}
+  );
+
+  if (!updatedUser)  throw new CustomError('User not found.', 404);
+
+  res.status(201).json({
+    status: "success",
+    message: "User languages updated",
+    updatedUser,
   });
 })

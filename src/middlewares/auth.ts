@@ -17,6 +17,11 @@ export const auth = async (req: Request, res: Response, next: NextFunction )=>{
     try{
         const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET) as DecodedToken;
         if(decoded.role === 'celebrity'){
+            // const user = await User.findById(decoded.id);
+            // if(user){
+            //     req.user = user;
+            //     return next();
+            // }
             const celebrity = await Celebrity.findById(decoded.id).populate('userId')
             if(celebrity){
                 req.user = celebrity;

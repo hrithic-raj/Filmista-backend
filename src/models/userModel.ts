@@ -14,6 +14,8 @@ const userSchema: Schema<IUser> = new Schema(
     refreshToken: { type: String },
     role: {type: String, default: 'user'},
     isBlocked: { type: Boolean, default: false},
+    genres: [{ type: Schema.Types.ObjectId, ref: 'Genre' }],
+    languages: [{ type: Schema.Types.ObjectId, ref: 'Language' }]
   },
   { timestamps: true }
 );

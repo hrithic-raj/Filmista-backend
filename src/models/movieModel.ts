@@ -4,10 +4,10 @@ import IMovie from "../interfaces/movieInterface";
 const movieSchema: Schema<IMovie> = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    releaseDate: { type: String, required: true },
-    duration: { type: Number, required: true },
+    releaseDate: { type: String },
+    duration: { type: String },
     genres: [{ type: Schema.Types.ObjectId, ref: 'Genre'}],
-    language: [{ type: Schema.Types.ObjectId, ref: 'Language'}],
+    languages: [{ type: Schema.Types.ObjectId, ref: 'Language'}],
     cast: [
         {
             name: { type: String, required: true },

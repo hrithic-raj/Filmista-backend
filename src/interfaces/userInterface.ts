@@ -10,6 +10,8 @@ interface IUser extends Document{
   role: string,
   profilePicture?: string,
   isBlocked?:boolean,
+  genres?: ObjectId[],
+  languages?: ObjectId[],
 }
 
 export default IUser

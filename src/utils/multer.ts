@@ -73,6 +73,7 @@ const storage = new CloudinaryStorage({
     const isPDF = file.mimetype === 'application/pdf';
     return {
       folder: 'filmista',
+      
       resource_type: 'auto', // Ensure PDFs are treated as raw files
     //   format: isPDF ? 'pdf' : undefined, // Explicitly set format for PDFs
       public_id: file.originalname.split('.')[0], // Use original filename without extension

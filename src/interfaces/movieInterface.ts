@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 interface IMovie {
     title: string;
     description: string;
-    releaseDate: string;
-    duration: number;
+    releaseDate?: string;
+    duration?: string;
     genres: mongoose.Types.ObjectId[];
-    language: mongoose.Types.ObjectId[];
+    languages: mongoose.Types.ObjectId[];
     cast: {
         name: string;
         role: string;
