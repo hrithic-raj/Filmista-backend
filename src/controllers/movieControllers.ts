@@ -11,8 +11,17 @@ export const getAllMovies = catchAsync( async(req: Request, res: Response, next:
     const movies = await Movie.find().populate(['genres', 'languages']);
     res.status(201).json({
         status: "success",
-        message: "New movie added",
+        message: "All movies fetched",
         movies,
+    });
+})
+export const getMoviesById = catchAsync( async(req: Request, res: Response, next: NextFunction)=>{
+    const {movieId} = req.params
+    const movie = await Movie.findById(movieId).populate(['genres', 'languages']);
+    res.status(201).json({
+        status: "success",
+        message: "Movie fetched successfully",
+        movie,
     });
 })
 

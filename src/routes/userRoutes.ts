@@ -5,12 +5,15 @@ import { userAuth } from '../middlewares/userAuth';
 import { auth } from '../middlewares/auth';
 import { getAllGenres, getGenres, getMoviesByGenre } from '../controllers/genreControllers';
 import { getAllLanguages, getMoviesByLanguage } from '../controllers/languageControllers';
-import { getAllMovies } from '../controllers/movieControllers';
+import { getAllMovies, getMoviesById } from '../controllers/movieControllers';
 
 const userRouter = express.Router();
 
 userRouter.post('/profile', auth, getProfile);
+
+//movie routes
 userRouter.get('/movies', auth, getAllMovies);
+userRouter.get('/movies/:movieId', auth, getMoviesById);
 
 //genre routes
 userRouter.get('/genres', auth, getAllGenres);
