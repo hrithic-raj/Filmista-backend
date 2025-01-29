@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-interface IMovie {
+interface IMovie{
+    _id?: mongoose.Types.ObjectId;
     title: string;
     description: string;
     releaseDate?: string;
@@ -10,6 +11,7 @@ interface IMovie {
     cast: {
         name: string;
         role: string;
+        profilePicture?: string;
         celebrityId?: string;
     }[];
     images?: {

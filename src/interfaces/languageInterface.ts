@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-interface ILanguage {
+interface ILanguage{
     language: string;
     poster: string;
     isArchive: boolean;

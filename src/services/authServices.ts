@@ -48,20 +48,20 @@ const authenticateUser = async (email: string, password: string): Promise<IUserR
     if(!user) throw new CustomError('Invalid email or password', 400);
     const isMatch = await bcrypt.compare(password, user.password || '');
     if(!isMatch) throw new CustomError('Invalid email or password', 400);
-    if(user.role === "celebrity"){
-        const celebrity = await Celebrity.findOne({userId: user._id});
-        // console.log(user);
-        const accessToken = generateAccessToken({ id: celebrity._id, role: user.role });
-        const refreshToken = generateRefreshToken({ id: celebrity._id, role: user.role });
-        user.refreshToken = refreshToken;
-        await user.save();
-        return {
-            user,
-            accessToken,
-            refreshToken,
-            role: user.role
-        }
-    }
+    // if(user.role === "celebrity"){
+    //     const celebrity = await Celebrity.findOne({userId: user._id});
+    //     // console.log(user);
+    //     const accessToken = generateAccessToken({ id: celebrity._id, role: user.role });
+    //     const refreshToken = generateRefreshToken({ id: celebrity._id, role: user.role });
+    //     user.refreshToken = refreshToken;
+    //     await user.save();
+    //     return {
+    //         user,
+    //         accessToken,
+    //         refreshToken,
+    //         role: user.role
+    //     }
+    // }
     const accessToken = generateAccessToken({ id: user._id, role: user.role });
     const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
     user.refreshToken = refreshToken;
@@ -77,21 +77,30 @@ const authenticateUser = async (email: string, password: string): Promise<IUserR
 const refreshTokenService = async(refreshToken: string)=>{
     const decoded: any = jwt.verify(refreshToken, config.REFRESH_TOKEN_SECRET);
 
-    if(decoded.role==='celebrity'){
-        const celebrity = await Celebrity.findById(decoded.id);
-        const user = await User.findById(celebrity.userId);
-        if(!user || user.refreshToken != refreshToken) throw new CustomError('Invalid refresh token', 403);
-        const newAccessToken = generateAccessToken({ id: celebrity._id, role: user.role });
-        return newAccessToken;
-    }else{
-        let model;
-        if(decoded.role==='admin') model = Admin;
-        if(decoded.role==='user') model = User;
-        const user = await model?.findById(decoded.id);
-        if(!user || user.refreshToken != refreshToken) throw new CustomError('Invalid refresh token', 403);
-        const newAccessToken = generateAccessToken({ id: user._id, role: user.role });
-        return newAccessToken;
-    }
+    let model;
+    if(decoded.role==='admin') model = Admin;
+    if(decoded.role==='user') model = User;
+    if(decoded.role==='celebrity') model = User;
+    const user = await model?.findById(decoded.id);
+    if(!user || user.refreshToken != refreshToken) throw new CustomError('Invalid refresh token', 403);
+    const newAccessToken = generateAccessToken({ id: user._id, role: user.role });
+    return newAccessToken;
+    
+    // if(decoded.role==='celebrity'){
+    //     const celebrity = await Celebrity.findById(decoded.id);
+    //     const user = await User.findById(celebrity.userId);
+    //     if(!user || user.refreshToken != refreshToken) throw new CustomError('Invalid refresh token', 403);
+    //     const newAccessToken = generateAccessToken({ id: celebrity._id, role: user.role });
+    //     return newAccessToken;
+    // }else{
+    //     let model;
+    //     if(decoded.role==='admin') model = Admin;
+    //     if(decoded.role==='user') model = User;
+    //     const user = await model?.findById(decoded.id);
+    //     if(!user || user.refreshToken != refreshToken) throw new CustomError('Invalid refresh token', 403);
+    //     const newAccessToken = generateAccessToken({ id: user._id, role: user.role });
+    //     return newAccessToken;
+    // }
 }
 
 const googleAuthService = async(email: string, name: string, picture: string, googleId: string)=>{

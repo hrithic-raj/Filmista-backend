@@ -4,7 +4,7 @@ import { BlockCelebrity, BlockUser, getAllCelebrities, getAllCelebrityRequest, g
 import { addGenre, archiveGenre, getAllGenres, getMoviesByGenre, updateGenre } from '../controllers/genreControllers';
 import upload from '../utils/multer';
 import { addLanguage, archiveLanguage, getAllLanguages, getMoviesByLanguage, updateLanguage } from '../controllers/languageControllers';
-import { addMovies, getAllMovies, getMoviesById } from '../controllers/movieControllers';
+import { addMovies, getAllMovies, getMoviesById, updateMovie } from '../controllers/movieControllers';
 
 const adminRouter = express.Router();
 
@@ -42,6 +42,11 @@ adminRouter.post('/movies', adminAuth, upload.fields([
   { name: 'horizontalPoster', maxCount: 1 },
   { name: 'otherImages', maxCount: 10 },
 ]), addMovies);
+adminRouter.patch('/movies/:id', adminAuth, upload.fields([
+  { name: 'poster', maxCount: 1 },
+  { name: 'horizontalPoster', maxCount: 1 },
+  { name: 'otherImages', maxCount: 10 },
+]), updateMovie);
 adminRouter.get('/movies/:movieId', adminAuth, getMoviesById);
 
 export default adminRouter

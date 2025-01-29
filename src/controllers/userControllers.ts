@@ -29,7 +29,7 @@ export const submitCelebrityRequest = catchAsync(async(req: Request, res: Respon
       message: "Request submitted successfully",
       request,
   });
-})
+});
 
 export const getProfile = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
   let user = req.user as IUser
@@ -46,7 +46,7 @@ export const getProfile = catchAsync(async(req: Request, res: Response, next: Ne
     message: "User profile fetched",
     user,
   });
-})
+});
 
 export const addUserGenres = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
   const user = req.user as any;
@@ -55,7 +55,8 @@ export const addUserGenres = catchAsync(async(req: Request, res: Response, next:
   if (!genreIds || !Array.isArray(genreIds))  throw new CustomError('Genres must be an array.', 400);
   
   const updatedUser = await User.findByIdAndUpdate(
-    user.userId ? user.userId._id : user._id,
+    // user.userId ? user.userId._id : user._id,
+    user._id,
     {$set:{genres: genreIds}},
     {new: true}
   );
@@ -67,7 +68,7 @@ export const addUserGenres = catchAsync(async(req: Request, res: Response, next:
     message: "User genres updated",
     updatedUser,
   });
-})
+});
 
 export const addUserLanguages = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
   const user = req.user as any;
@@ -75,7 +76,8 @@ export const addUserLanguages = catchAsync(async(req: Request, res: Response, ne
   if (!langIds || !Array.isArray(langIds)) throw new CustomError('languages must be an array.', 400);
 
   const updatedUser = await User.findByIdAndUpdate(
-    user.userId?user.userId._id : user._id,
+    // user.userId?user.userId._id : user._id,
+    user._id,
     {$set:{languages:langIds}},
     {new: true}
   );
@@ -87,4 +89,4 @@ export const addUserLanguages = catchAsync(async(req: Request, res: Response, ne
     message: "User languages updated",
     updatedUser,
   });
-})
+});

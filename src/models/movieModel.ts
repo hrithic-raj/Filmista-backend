@@ -12,6 +12,7 @@ const movieSchema: Schema<IMovie> = new mongoose.Schema({
         {
             name: { type: String, required: true },
             role: { type: String, required: true },
+            profilePicture: { type: String },
             celebrityId: { type: String }
         }
     ],
