@@ -26,7 +26,9 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
     if(user || admin || celebrity) throw new CustomError('User Already Exist, Please Signin', 400);
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    user = new User({ name, email, password: hashedPassword, otp, role:'user'});
+    const avatarUrl = `https://ui-avatars.com/api/?name=${name.charAt(0)}&background=46cec2&color=fff`;
+
+    user = new User({ name, email, password: hashedPassword, profilePicture: avatarUrl, otp, role:'user'});
     await user.save();
     const accessToken = generateAccessToken({ id: user._id, role: 'user' });
     const refreshToken = generateRefreshToken({ id: user._id, role: 'user' });

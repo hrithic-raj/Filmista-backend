@@ -32,7 +32,8 @@ export const submitCelebrityRequest = catchAsync(async(req: Request, res: Respon
 });
 
 export const getProfile = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
-  let user = req.user as IUser
+  let userData = req.user as IUser
+  let user = await User.findById(userData._id).populate('genres').populate('languages');
   // if(user.role==='celebrity'){
   //   const celebrity = await Celebrity.findOne({userId:user._id}).populate('userId')
   //   res.status(200).json({
@@ -88,5 +89,39 @@ export const addUserLanguages = catchAsync(async(req: Request, res: Response, ne
     status: "success",
     message: "User languages updated",
     updatedUser,
+  });
+});
+
+
+export const updateUserProfile = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+  const userData = req.user as IUser;
+  const {name, bio} = req.body;
+  
+  const user = await User.findById(userData._id);
+  if(!user) next(new CustomError('User not found',404));
+
+  let profilePictureUrl = user.profilePicture;
+  let bannerUrl = user.banner;
+
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+  if(files && files.profilePicture){
+    profilePictureUrl = files.profilePicture?.[0]?.path;
+  }
+
+  if(files && files.banner){
+    bannerUrl = files.banner?.[0]?.path;
+  }
+
+  user.name = name || user.name;
+  user.bio = bio || user.bio;
+  user.profilePicture = profilePictureUrl;
+  user.banner = bannerUrl;
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "User profile updated",
+    user,
   });
 });

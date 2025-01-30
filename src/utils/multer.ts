@@ -73,10 +73,8 @@ const storage = new CloudinaryStorage({
     const isPDF = file.mimetype === 'application/pdf';
     return {
       folder: 'filmista',
-      
-      resource_type: 'auto', // Ensure PDFs are treated as raw files
-    //   format: isPDF ? 'pdf' : undefined, // Explicitly set format for PDFs
-      public_id: file.originalname.split('.')[0], // Use original filename without extension
+      resource_type: 'auto',
+      public_id: file.originalname.split('.')[0],
     };
   },
 }) as StorageEngine;
@@ -87,3 +85,38 @@ const upload = multer({
 });
 
 export default upload;
+
+
+// import { v2 as cloudinary } from 'cloudinary';
+// import { CloudinaryStorage } from 'multer-storage-cloudinary';
+// import multer, { StorageEngine } from 'multer';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
+
+// const storage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: async (req, file) => {
+//     const isImage = file.mimetype.startsWith('image/');
+//     return {
+//       folder: 'filmista',
+//       resource_type: 'auto',
+//       public_id: file.originalname.split('.')[0],
+//       transformation: isImage
+//         ? [
+//             { width: 1200, quality: "auto:good", fetch_format: "auto" }, // Resize & optimize
+//           ]
+//         : [], // No transformation for non-image files
+//     };
+//   },
+// }) as StorageEngine;
+
+// const upload = multer({ storage });
+
+// export default upload;

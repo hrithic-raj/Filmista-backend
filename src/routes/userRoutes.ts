@@ -1,6 +1,6 @@
 import express from 'express'
 import upload from '../utils/multer';
-import { addUserGenres, addUserLanguages, getProfile, submitCelebrityRequest } from '../controllers/userControllers';
+import { addUserGenres, addUserLanguages, getProfile, submitCelebrityRequest, updateUserProfile } from '../controllers/userControllers';
 import { userAuth } from '../middlewares/userAuth';
 import { auth } from '../middlewares/auth';
 import { getAllGenres, getGenres, getMoviesByGenre } from '../controllers/genreControllers';
@@ -10,7 +10,13 @@ import { addToWaychlist, getUserWaychlist, removeFromWaychlist } from '../contro
 
 const userRouter = express.Router();
 
-userRouter.post('/profile', auth, getProfile);
+userRouter.get('/profile', auth, getProfile);
+userRouter.put('/edit-profile', auth, upload.fields([
+    {name: "profilePicture", maxCount: 1},
+    {name: "banner", maxCount: 1},
+]), 
+    updateUserProfile
+);
 
 // movie routes
 userRouter.get('/movies', auth, getAllMovies);

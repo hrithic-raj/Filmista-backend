@@ -37,7 +37,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction )=>{
         // }
         const user = await User.findById(decoded.id);
         if(user){
-            req.user = user;
+            req.user = user as IUser;
             // console.log(user);
             return next();
         }

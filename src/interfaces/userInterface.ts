@@ -12,6 +12,8 @@ interface IUser extends Document{
   isBlocked?:boolean,
   genres?: ObjectId[],
   languages?: ObjectId[],
+  banner?: string;
+  bio?: string;
 }
 
 export default IUser
