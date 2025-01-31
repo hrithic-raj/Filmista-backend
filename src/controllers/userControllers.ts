@@ -125,3 +125,4 @@ export const updateUserProfile = catchAsync(async(req: Request, res: Response, n
     user,
   });
 });
+

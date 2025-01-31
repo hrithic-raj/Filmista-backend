@@ -25,7 +25,7 @@ const movieSchema: Schema<IMovie> = new mongoose.Schema({
         trailer: { type: String, required: true },
         others: { type: [String] }
     },
-    rating: { type: Number },
+    rating: { type: Number, default: 0},
     reviews: [
         {
             userId: { type: String, required: true },

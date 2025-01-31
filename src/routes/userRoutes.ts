@@ -7,6 +7,7 @@ import { getAllGenres, getGenres, getMoviesByGenre } from '../controllers/genreC
 import { getAllLanguages, getMoviesByLanguage } from '../controllers/languageControllers';
 import { getAllMovies, getMoviesById } from '../controllers/movieControllers';
 import { addToWaychlist, getUserWaychlist, removeFromWaychlist } from '../controllers/watchlistControllers';
+import { getMovieRatings, RateMovie } from '../controllers/rateAndReviewControllers';
 
 const userRouter = express.Router();
 
@@ -21,6 +22,10 @@ userRouter.put('/edit-profile', auth, upload.fields([
 // movie routes
 userRouter.get('/movies', auth, getAllMovies);
 userRouter.get('/movies/:movieId', auth, getMoviesById);
+
+
+userRouter.post('/ratings/:movieId', auth, RateMovie);
+userRouter.get('/ratings/:movieId', auth, getMovieRatings);
 
 // genre routes
 userRouter.get('/genres', auth, getAllGenres);
