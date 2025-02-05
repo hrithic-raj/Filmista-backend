@@ -5,7 +5,6 @@ import CustomError from "../utils/customErrorHandler";
 
 export const addToWaychlist = async (userId: string, movieId:string) =>{
     const userWatchlist = await Watchlist.findOne({userId});
-    console.log(userWatchlist);
     if(!userWatchlist){
         const newWatchlist = new Watchlist({
             userId: new mongoose.Types.ObjectId(userId),
@@ -26,7 +25,6 @@ export const addToWaychlist = async (userId: string, movieId:string) =>{
 
 export const removeFromWaychlist = async (userId: string, movieId:string) =>{
     const userWatchlist = await Watchlist.findOne({userId});
-    console.log(userWatchlist);
     if(!userWatchlist) throw new CustomError('User Watchlist not found', 404);
     
     const movieExist = userWatchlist.movies.some((movie)=> movie.movieId.toString()===movieId);
@@ -40,6 +38,14 @@ export const removeFromWaychlist = async (userId: string, movieId:string) =>{
 
     userWatchlist.movies = updatedMovies;
     await userWatchlist.save();
-    
-    return { message: "Movie removed from watchlist", watchlist: userWatchlist };
+    const updatedWatchlist = await Watchlist.findOne({userId})
+        .populate({
+            path: "movies.movieId",
+            model: "Movie",
+            populate: [
+                { path: "genres", model: "Genre", select: "genre -_id" },
+                { path: "languages", model: "Language", select: "language -_id" }
+            ]
+        });
+    return { message: "Movie removed from watchlist", watchlist: updatedWatchlist };
 };

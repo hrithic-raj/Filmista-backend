@@ -96,13 +96,12 @@ export const addUserLanguages = catchAsync(async(req: Request, res: Response, ne
 export const updateUserProfile = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
   const userData = req.user as IUser;
   const {name, bio} = req.body;
-  
+
   const user = await User.findById(userData._id);
   if(!user) next(new CustomError('User not found',404));
-
+  
   let profilePictureUrl = user.profilePicture;
   let bannerUrl = user.banner;
-
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
   if(files && files.profilePicture){
@@ -118,11 +117,11 @@ export const updateUserProfile = catchAsync(async(req: Request, res: Response, n
   user.profilePicture = profilePictureUrl;
   user.banner = bannerUrl;
   await user.save();
-
+  const updatedUser = await User.findById(user._id).populate('genres').populate('languages');
   res.status(200).json({
     status: "success",
     message: "User profile updated",
-    user,
+    user: updatedUser,
   });
 });
 

@@ -55,3 +55,19 @@ export const removeFromWaychlist = catchAsync(async(req: Request, res: Response,
         watchlist: result.watchlist,
     });
 });
+
+
+export const checkMovieInWatchlist = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as IUser;
+    const { movieId } = req.params;
+    
+    if (!user) throw new CustomError('User not authenticated', 401);
+
+    const watchlist = await Watchlist.findOne({ userId: user._id, "movies.movieId": movieId });
+
+    res.status(200).json({
+        status: "success",
+        message: "checking movie in watchlist complete",
+        isInWatchlist: !!watchlist 
+    });
+});

@@ -6,7 +6,7 @@ import { auth } from '../middlewares/auth';
 import { getAllGenres, getGenres, getMoviesByGenre } from '../controllers/genreControllers';
 import { getAllLanguages, getMoviesByLanguage } from '../controllers/languageControllers';
 import { getAllMovies, getMoviesById } from '../controllers/movieControllers';
-import { addToWaychlist, getUserWaychlist, removeFromWaychlist } from '../controllers/watchlistControllers';
+import { addToWaychlist, checkMovieInWatchlist, getUserWaychlist, removeFromWaychlist } from '../controllers/watchlistControllers';
 import { getMovieRatings, RateMovie } from '../controllers/rateAndReviewControllers';
 
 const userRouter = express.Router();
@@ -44,5 +44,6 @@ userRouter.post('/celebrity-request', userAuth, upload.single('proofDocument'), 
 userRouter.get('/watchlist', auth, getUserWaychlist);
 userRouter.post('/watchlist/:movieId', auth, addToWaychlist);
 userRouter.delete('/watchlist/:movieId', auth, removeFromWaychlist);
+userRouter.get('/watchlist/check/:movieId', auth, checkMovieInWatchlist);
 
 export default userRouter
