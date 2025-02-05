@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npx tsc",
     "server": "ts-node-dev --poll src/server.ts",
-    "start": "npx tsc -w & nodemon dist/server.js"
+    "start": "npx tsc && node dist/server.js"
   },
   "keywords": [],
   "author": "",
