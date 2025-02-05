@@ -44,7 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
       // origin: 'http://localhost:5173',
-      origin: 'https://filmista-frontend.vercel.app',
+      origin: ['https://filmista-frontend.vercel.app'],
       credentials: true,
   })
 );
