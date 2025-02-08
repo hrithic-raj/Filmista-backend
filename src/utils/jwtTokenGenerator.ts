@@ -11,18 +11,24 @@ export const generateRefreshToken = (payload: object) => {
 };
 
 export const cookieSaver = (res: Response, refreshToken: string)=>{
+    // res.cookie('refreshToken', refreshToken, {
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: 'strict',
+    //     maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
+        secure: true, // Only works if you're using HTTPS
+        sameSite: 'none', // For cross-site requests
         maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+      });
 }
 
 export const clearCookie = (res: Response)=>{
     res.clearCookie('refreshToken',{
         httpOnly: true,
         secure: true,
-        sameSite: 'strict',
+        sameSite: 'none',
     });
 }
