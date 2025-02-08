@@ -41,14 +41,23 @@ app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const allowedOrigins = [
+  'https://filmista.netlify.app',
+  'http://localhost:5173',
+  'https://filmista-frontend-63bkexaxj-hrithic-rajs-projects.vercel.app/',
+];
+
 app.use(
   cors({
-      // origin: 'http://localhost:5173',
-      // origin: 'https://filmista-frontend.vercel.app',
-      // origin: 'https://lovely-caramel-5ed216.netlify.app',
-      origin: 'https://filmista.netlify.app',
-      methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      credentials: true,
+    origin: (origin, callback) => {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'), false);
+      }
+    },
+    methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+    credentials: true,
   })
 );
 app.options('*', cors());
