@@ -73,22 +73,18 @@ export const refreshToken = catchAsync(async (req: Request, res: Response, next:
 })
 
 export const googleAuth = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const {email, name, picture, sub: googleId} = req.user as {
-        email: string, 
-        name: string, 
-        picture: string, 
-        sub: string;
-    };
-    
-    const {user, accessToken, refreshToken} = await googleAuthService(email, name, picture, googleId);
+    const {credentialResponse} = req.body;
+    const {user, accessToken, refreshToken, role, newUser} = await googleAuthService(res, credentialResponse);
+    cookieSaver(res, refreshToken);
     res.status(200).json({
         status: "success",
         message: "Login successful via Google",
         user,
         accessToken,
         refreshToken,
+        role,
+        newUser
     });
-    res.redirect('/home');
 })
 
 export const signout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

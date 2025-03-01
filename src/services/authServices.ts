@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import IUser from "../interfaces/userInterface";
 import User from "../models/userModel";
 import CustomError from "../utils/customErrorHandler";
@@ -8,8 +8,11 @@ import Celebrity from "../models/celebrityModel";
 import Admin from "../models/adminModel";
 import jwt from 'jsonwebtoken';
 import { config } from "../config/confiq";
-import passport from "passport";
+// import passport from "passport";
 import IAdmin from "../interfaces/adminInterface";
+import { CredentialResponse } from "../interfaces/credentialInterface";
+import { OAuth2Client } from "google-auth-library";
+import axios from "axios";
 
 interface IUserResponse {
     user?: IUser,
@@ -105,26 +108,46 @@ const refreshTokenService = async(refreshToken: string)=>{
     // }
 }
 
-const googleAuthService = async(email: string, name: string, picture: string, googleId: string)=>{
+const googleAuthService = async(res: Response, credentialResponse : CredentialResponse)=>{
+    const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
+    if (!credentialResponse) {
+        throw new CustomError("No google credentials provided!", 400);
+    }
+
+    const googleUser = await axios.get(
+        "https://www.googleapis.com/oauth2/v2/userinfo",
+        {
+          headers: { Authorization: `Bearer ${credentialResponse.access_token}` },
+        }
+    );
+
+    const { email, name, picture, id:googleId } = googleUser.data;
+
     let user = await User.findOne({ email }) || await Celebrity.findOne({email})
+    let accessToken, refreshToken, newUser;
+    
     if(!user){
         user = new User({ name, email, role:'user', profilePicture: picture, googleId})
         await user.save();
-        const accessToken = generateAccessToken({ id: user._id, role: 'user' });
-        const refreshToken = generateRefreshToken({ id: user._id, role: 'user' });
+        accessToken = generateAccessToken({ id: user._id, role: 'user' });
+        refreshToken = generateRefreshToken({ id: user._id, role: 'user' });
         user.refreshToken = refreshToken;
         await user.save();
+        newUser = true;
+    }else{
+        accessToken = generateAccessToken({ id: user._id, role: user.role });
+        refreshToken = generateRefreshToken({ id: user._id, role: user.role });
+        user.refreshToken = refreshToken;
+        await user.save();
+        newUser = false;
     }
-
-    const accessToken = generateAccessToken({ id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ id: user._id, role: user.role });
-    user.refreshToken = refreshToken;
-    await user.save();
+    if(!user) throw new CustomError("Google Auth faild !", 400);
     return {
         user,
         accessToken,
         refreshToken,
-        role: user.role
+        role: user.role,
+        newUser,
     }
 }
 
