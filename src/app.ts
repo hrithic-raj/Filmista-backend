@@ -18,7 +18,6 @@ connectDB()
 app.use(cors({
   origin: 'https://filmista.netlify.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: "*",
   credentials: true,
 }));  
 

@@ -6,7 +6,7 @@ import User from '../models/userModel';
 import IUser from '../interfaces/userInterface';
 
 interface DecodedToken extends JwtPayload{
-    userid: string;
+    id: string;
     role: string;
 }
 
