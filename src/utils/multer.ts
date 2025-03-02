@@ -71,16 +71,10 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
     const isPDF = file.mimetype === 'application/pdf';
-    const isImage = file.mimetype.startsWith('image/');
     return {
       folder: 'filmista',
       resource_type: 'auto',
       public_id: file.originalname.split('.')[0],
-      transformation: isImage
-        ? [
-            { width: 1200, quality: "auto:good", fetch_format: "auto" }, // Resize & optimize
-          ]
-        : [], // No transformation for non-image files
     };
   },
 }) as StorageEngine;

@@ -38,29 +38,36 @@ if (config.NODE_ENV === 'production') {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
-const allowedOrigins = [
-  'https://filmista.netlify.app',
-  'http://localhost:5173',
-  'https://filmista-frontend-63bkexaxj-hrithic-rajs-projects.vercel.app/',
-];
+// const allowedOrigins = [
+//   'https://filmista.netlify.app',
+//   'http://localhost:5173',
+//   'https://filmista-frontend-63bkexaxj-hrithic-rajs-projects.vercel.app/',
+// ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'), false);
-      }
-    },
-    methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-    credentials: true,
-  })
-);
-app.options('*', cors());
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'), false);
+//       }
+//     },
+//     methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+//     credentials: true,
+//   })
+// );
+// app.options('*', cors());
+
+cors({
+  origin: "https://filmista.netlify.app",
+  credentials: true,
+  methods: "GET, POST, PUT, PATCH, DELETE",
+  allowedHeaders: "Content-Type, Authorization",
+})
 
 // Routes
 app.use("/api/auth", authRouter);
