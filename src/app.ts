@@ -62,12 +62,14 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 // );
 // app.options('*', cors());
 
-cors({
-  origin: "https://filmista.netlify.app",
-  credentials: true,
-  methods: "GET, POST, PUT, PATCH, DELETE",
-  allowedHeaders: "Content-Type, Authorization",
-})
+app.use(
+  cors({
+    origin: "https://filmista.netlify.app",
+    credentials: true,
+    methods: "GET, POST, PUT, PATCH, DELETE",
+    allowedHeaders: "Content-Type, Authorization",
+  })
+);
 
 // Routes
 app.use("/api/auth", authRouter);
