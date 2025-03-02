@@ -15,65 +15,46 @@ const app: Express = express();
 connectDB()
 
 // Middleware
+app.use(cors({
+  origin: ['https://filmista.netlify.app', 'http://localhost:5173'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  exposedHeaders: ['Content-Disposition']
+}));  
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
+
 app.use(
   session({
     secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: true,
       httpOnly: true,
-    },
-  })
-);
+      sameSite: 'none',
+    },  
+  })  
+);  
 
-app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 
 if (config.NODE_ENV === 'production') {
   app.use(helmet());
 } else {
   app.use(helmet({ contentSecurityPolicy: false }));
-}
+}    
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// const allowedOrigins = [
-//   'https://filmista.netlify.app',
-//   'http://localhost:5173',
-//   'https://filmista-frontend-63bkexaxj-hrithic-rajs-projects.vercel.app/',
-// ];
-
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error('Not allowed by CORS'), false);
-//       }
-//     },
-//     methods: "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-//     credentials: true,
-//   })
-// );
-// app.options('*', cors());
-
-app.use(
-  cors({
-    origin: "https://filmista.netlify.app",
-    credentials: true,
-    methods: "GET, POST, PUT, PATCH, DELETE",
-  })
-);
 
 // Routes
+
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
-// app.use("/api/users", userRouter);
 
 export default app;

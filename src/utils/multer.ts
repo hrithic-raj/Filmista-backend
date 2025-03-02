@@ -54,6 +54,39 @@
 
 
 
+// import { v2 as cloudinary } from 'cloudinary';
+// import { CloudinaryStorage } from 'multer-storage-cloudinary';
+// import multer, { StorageEngine } from 'multer';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
+
+// const storage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: async (req, file) => {
+//     const isPDF = file.mimetype === 'application/pdf';
+//     return {
+//       folder: 'filmista',
+//       resource_type: 'auto',
+//       public_id: file.originalname.split('.')[0],
+//     };
+//   },
+// }) as StorageEngine;
+
+// const upload = multer({
+//   storage,
+//   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB file size limit
+// });
+
+// export default upload;
+
+
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer, { StorageEngine } from 'multer';
@@ -75,6 +108,14 @@ const storage = new CloudinaryStorage({
       folder: 'filmista',
       resource_type: 'auto',
       public_id: file.originalname.split('.')[0],
+      transformation: file.mimetype.startsWith('image/')
+        ? [{ quality: "auto:good", fetch_format: "auto" }]
+        : [],
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      }
     };
   },
 }) as StorageEngine;
