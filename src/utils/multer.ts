@@ -111,11 +111,6 @@ const storage = new CloudinaryStorage({
       transformation: file.mimetype.startsWith('image/')
         ? [{ quality: "auto:good", fetch_format: "auto" }]
         : [],
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      }
     };
   },
 }) as StorageEngine;
