@@ -16,10 +16,10 @@ connectDB()
 
 // Middleware
 app.use(cors({
-  origin: 'https://filmista.netlify.app',
+  origin: config.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
-}));  
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

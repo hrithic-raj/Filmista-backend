@@ -28,6 +28,6 @@ export const auth = async (req: Request, res: Response, next: NextFunction )=>{
         next();
 
     } catch (error) {
-        next(new CustomError('Invalid token', 401));
+        res.status(401).json({ message: 'Invalid token' });
     }
 };
