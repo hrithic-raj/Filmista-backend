@@ -4,6 +4,7 @@ import CustomError from "../utils/customErrorHandler";
 import Rating from "../models/ratingModel";
 import IUser from "../interfaces/userInterface";
 import Movie from "../models/movieModel";
+import * as reviewService from '../services/reviewService';
 
 export const RateMovie = catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     const user = req.user as IUser;
@@ -41,3 +42,48 @@ export const getMovieRatings = catchAsync(async(req: Request, res: Response, nex
         ratings,
     });
 })
+
+
+export const createReview = catchAsync(async(req:Request, res:Response)=>{
+    const {movieId, title, content} = req.body;
+    const user = req.user as IUser;
+    const review = await reviewService.addReview(user._id.toString(), movieId, title, content);
+    res.status(200).json({
+        status: "success",
+        message: "Review added successfully",
+        review,
+    });
+});
+
+export const getAllReviews = catchAsync(async(req:Request, res:Response)=>{
+    const { movieId } = req.params;
+    // const user = req.user as IUser;
+    const reviews = await reviewService.getAllReviews(movieId);
+    res.status(200).json({
+        status: "success",
+        message: "Reviews fetched successfully",
+        reviews,
+    });
+});
+
+export const likeReview = catchAsync(async(req:Request, res:Response)=>{
+    const { reviewId } = req.params;
+    const user = req.user as IUser;
+    const updatedReview = await reviewService.likeReview(reviewId, user._id.toString());
+    res.status(200).json({
+        status: "success",
+        message: "Reviews fetched successfully",
+        updatedReview,
+    });
+});
+  
+export const dislikeReview = catchAsync(async(req:Request, res:Response)=>{
+    const { reviewId } = req.params;
+    const user = req.user as IUser;
+    const updatedReview = await reviewService.dislikeReview(reviewId, user._id.toString());
+    res.status(200).json({
+        status: "success",
+        message: "Reviews fetched successfully",
+        updatedReview,
+    });
+});
