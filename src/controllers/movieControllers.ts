@@ -155,12 +155,8 @@ export const updateMovie = catchAsync(async (req: Request, res: Response, next: 
 export const searchMovies = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { query } = req.query;
     if (!query) throw new CustomError('Query is required', 400);
-    // const movies = await Movie.find({ title: new RegExp(query as string, 'i') }).limit(10);
     const regex = new RegExp(query as string, 'i');
-    console.log("Regex Pattern:", regex);
-
     const movies = await Movie.find({ title: regex }).limit(5);
-    console.log("Movies Found:", movies);
 
     res.status(200).json({
         status: "success",
