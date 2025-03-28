@@ -17,7 +17,7 @@ connectDB()
 // Middleware
 app.use(cors({
   origin: config.FRONTEND_URL,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'PUT'],
   credentials: true,
 }));
 
