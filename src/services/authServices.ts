@@ -87,7 +87,7 @@ const refreshTokenService = async(refreshToken: string)=>{
     if(decoded.role==='user') model = User;
     if(decoded.role==='celebrity') model = User;
     const user = await model?.findById(decoded.id);
-    if(!user || user.refreshToken != refreshToken) throw new CustomError('Invalid refresh token', 403);
+    if(!user) throw new CustomError('Invalid refresh token', 403);
     const newAccessToken = generateAccessToken({ id: user._id, role: user.role });
     return newAccessToken;
     
