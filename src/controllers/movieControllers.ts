@@ -18,6 +18,21 @@ export const getAllMovies = catchAsync( async(req: Request, res: Response, next:
         movies,
     });
 })
+export const getAllMoviesWithPagination = catchAsync( async(req: Request, res: Response, next: NextFunction)=>{
+    const page = parseInt(req.query.page as string) || 1; 
+    const limit = 8;
+    const skip = (page - 1) * limit;
+    const movies = await Movie.find().skip(skip).limit(limit).populate(['genres', 'languages']);
+    const totalMovies = await Movie.countDocuments();
+
+    res.status(201).json({
+        status: "success",
+        message: "Movies fetched with respect to pagination",
+        movies,
+        totalPages: Math.ceil(totalMovies/limit),
+        currentPage: page,
+    });
+})
 export const getMoviesById = catchAsync( async(req: Request, res: Response, next: NextFunction)=>{
     const {movieId} = req.params
     const movie = await Movie.findById(movieId).populate(['genres', 'languages']);

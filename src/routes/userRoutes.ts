@@ -5,7 +5,7 @@ import { userAuth } from '../middlewares/userAuth';
 import { auth } from '../middlewares/auth';
 import { getAllGenres, getGenres, getMoviesByGenre } from '../controllers/genreControllers';
 import { getAllLanguages, getMoviesByLanguage } from '../controllers/languageControllers';
-import { getAllMovies, getMoviesById, searchMovies } from '../controllers/movieControllers';
+import { getAllMovies, getAllMoviesWithPagination, getMoviesById, searchMovies } from '../controllers/movieControllers';
 import { addToWaychlist, checkMovieInWatchlist, getUserWaychlist, removeFromWaychlist } from '../controllers/watchlistControllers';
 import { createReview, dislikeReview, getAllReviews, getMovieRatings, likeReview, RateMovie } from '../controllers/rateAndReviewControllers';
 
@@ -22,6 +22,7 @@ userRouter.put('/edit-profile', auth, upload.fields([
 // movie routes
 userRouter.get('/movies', auth, getAllMovies);
 userRouter.get('/movies/search', auth, searchMovies);
+userRouter.get('/movies/explore', auth, getAllMoviesWithPagination);
 userRouter.get('/movies/:movieId', auth, getMoviesById);
 
 // rate and review
